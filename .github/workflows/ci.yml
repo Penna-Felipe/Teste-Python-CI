@@ -61,7 +61,8 @@ jobs:
                   }
                 }
               }' $JIRA_BASE_URL/rest/api/2/issue/
-          fi
+          echo "Response from Jira: $response"
+          echo "HTTP Status: $(echo $response | jq .status)"
         
       - name: Debug Jira Secrets
         run: |
