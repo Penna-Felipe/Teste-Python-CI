@@ -73,7 +73,7 @@ jobs:
                     "key": "T1" 
                   },
                   "summary": "Test failures detected in CI pipeline",
-                  "description": "Failed tests: $FAILED_TESTS.\nFailure details: $FAILURE_MESSAGES\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
+                  "description": "Failed tests: $FAILED_TESTS.\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
                   "issuetype": {
                     "name": "Bug"
                   }
