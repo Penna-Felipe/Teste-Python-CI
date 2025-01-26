@@ -1,0 +1,64 @@
+name: Python CI with Jira Integration
+
+on:
+  push:
+    branches:
+      - testes
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Configurar o Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      # 3. Instalar dependências
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      # 4. Rodar testes
+      - name: Run tests
+        id: pytest
+        run: |
+          pytest --junitxml=results.xml
+        continue-on-error: true
+
+      # 5. Criar issue no Jira em caso de falha nos testes
+      - name: Create Jira Issue on Test Failure
+        if: failure()
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          FAILED_TESTS=$(grep -c '<failure>' results.xml || true)
+          if [ "$FAILED_TESTS" -gt 0 ]; then
+            curl -X POST \
+              -H "Authorization: Basic $(echo -n $JIRA_EMAIL:$JIRA_API_TOKEN | base64)" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "fields": {
+                  "project": {
+                    "key": "T1"  # Substitua pelo código do projeto no Jira
+                  },
+                  "summary": "Test failures detected in CI pipeline",
+                  "description": "Failed tests: '"$FAILED_TESTS"'.\n\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
+                  "issuetype": {
+                    "name": "Bug"
+                  }
+                }
+              }' $JIRA_BASE_URL/rest/api/2/issue/
+          fi
