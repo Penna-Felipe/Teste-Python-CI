@@ -61,8 +61,7 @@ jobs:
                   }
                 }
               }' $JIRA_BASE_URL/rest/api/2/issue/
-          echo "Response from Jira: $response"
-          echo "HTTP Status: $(echo $response | jq .status)"
+          fi
         
       - name: Debug Jira Secrets
         run: |
@@ -83,6 +82,8 @@ jobs:
             else
               echo "JIRA_API_TOKEN is set"
             fi
+            echo "Response from Jira: $response"
+            echo "HTTP Status: $(echo $response | jq .status)"
         
         
 
