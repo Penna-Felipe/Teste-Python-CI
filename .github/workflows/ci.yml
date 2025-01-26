@@ -46,7 +46,7 @@ jobs:
       - name: Extract test results and create Jira issue
         run: |
           # Contar o número de falhas
-          FAILED_TESTS=$(xmllint --xpath "count(//failure)" results.xml | tr -d '[:space:]'))
+          FAILED_TESTS=$(xmllint --xpath "count(//failure)" results.xml | tr -d '[:space:]')
 
           # Extrair as mensagens de falha
           FAILURE_MESSAGES=$(xmllint --xpath "//failure/@message" results.xml)
