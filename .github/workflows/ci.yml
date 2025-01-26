@@ -63,19 +63,19 @@ jobs:
           echo "Failure messages: $FAILURE_MESSAGES"
 
           if [ "$FAILED_TESTS" -gt 0 ]; then
-            AUTH=$(echo -n "${JIRA_EMAIL}:${JIRA_API_TOKEN}" | base64)
             curl -X POST \
               -u "${JIRA_EMAIL}:${JIRA_API_TOKEN}" \
               -H "Content-Type: application/json" \
               -d '{
                 "fields": {
                   "project": {
-                    "key": "T1" 
+                    "key": "T1"
                   },
                   "summary": "Test failures detected in CI pipeline",
-                  "description": "Failed tests: $FAILED_TESTS.\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
+                  "description": "Failed tests: '"$FAILED_TESTS"'.\nCommit Information:\n- Commit: '"${{ github.sha }}"'\n- Author: '"${{ github.actor }}"'\n- Message: '"${{ github.event.head_commit.message }}"'",
                   "issuetype": {
                     "name": "Bug"
                   }
+                }
               }' $JIRA_BASE_URL/rest/api/2/issue/
           fi
