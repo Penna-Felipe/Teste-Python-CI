@@ -55,10 +55,8 @@ jobs:
           # Extrair as mensagens de falha
           FAILURE_MESSAGES=$(xmllint --xpath "//failure/@message" results.xml)
 
-          # Garantir que o valor seja um número
-          if ! [[ "$FAILED_TESTS" =~ ^[0-9]+$ ]]; then
-            FAILED_TESTS=0
-          fi
+          # Substituir quebras de linha por espaço e escapar aspas
+          FAILURE_MESSAGES=$(echo "$FAILURE_MESSAGES" | sed 's/"/\\"/g' | tr '\n' ' ')
 
           # Exibir no log
           echo "Failed tests: $FAILED_TESTS"
@@ -75,7 +73,7 @@ jobs:
                     "key": "T1" 
                   },
                   "summary": "Test failures detected in CI pipeline",
-                  "description": "Failed tests: teste.\nFailure details: teste\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
+                  "description": "Failed tests: $FAILED_TESTS.\nFailure details: $FAILURE_MESSAGES\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
                   "issuetype": {
                     "name": "Bug"
                   }
