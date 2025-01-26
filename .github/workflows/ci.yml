@@ -29,32 +29,39 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
 
-      # 4. Rodar testes
+      # 4. Instalar o xmllint
+      - name: Install xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+
+      # 5. Rodar testes
       - name: Run tests
         id: pytest
         run: |
           pytest --junitxml=results.xml
         continue-on-error: true
-      
-      - name: Show contents of results.xml
-        run: |
-          cat results.xml
-      
-      - name: Debug FAILED_TESTS
-        run: |
-          FAILED_TESTS=$(grep -c '<failures>' results.xml || echo 0)
-          echo "Failed tests: $FAILED_TESTS"
-        
 
-      # 5. Criar issue no Jira em caso de falha nos testes
+      # 6. Contar falhas no XML usando xmllint
+      - name: Extract test results and create Jira issue
+        run: |
+          # Contar o número de falhas
+          FAILED_TESTS=$(xmllint --xpath "count(//failure)" results.xml)
+
+          # Extrair as mensagens de falha
+          FAILURE_MESSAGES=$(xmllint --xpath "//failure/@message" results.xml)
+
+          # Exibir no log
+          echo "Failed tests: $FAILED_TESTS"
+          echo "Failure messages: $FAILURE_MESSAGES"
+
+      # 7. Criar issue no Jira em caso de falha nos testes
       - name: Create Jira Issue on Test Failure
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
-          FAILED_TESTS=$(grep -c '<failures>' results.xml || true)
-          echo "Failed tests: $FAILED_TESTS"
           if [ "$FAILED_TESTS" -gt 0 ]; then
             AUTH=$(echo -n "${JIRA_EMAIL}:${JIRA_API_TOKEN}" | base64)
             curl -X POST \
@@ -66,7 +73,7 @@ jobs:
                     "key": "T1" 
                   },
                   "summary": "Test failures detected in CI pipeline",
-                  "description": "Failed tests: '"$FAILED_TESTS"'.\n\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
+                  "description": "Failed tests: '"$FAILED_TESTS"'.\nFailure details: '"$FAILURE_MESSAGES"'\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
                   "issuetype": {
                     "name": "Bug"
                   }
