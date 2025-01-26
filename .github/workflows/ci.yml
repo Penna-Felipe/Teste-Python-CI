@@ -38,15 +38,11 @@ jobs:
 
       # 5. Criar issue no Jira em caso de falha nos testes
       - name: Create Jira Issue on Test Failure
-        if: failure()
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
-          echo "JIRA_EMAIL: $JIRA_EMAIL"
-          echo "JIRA_API_TOKEN: $JIRA_API_TOKEN"
-          echo "JIRA_BASE_URL: $JIRA_BASE_URL"
           FAILED_TESTS=$(grep -c '<failure>' results.xml || true)
           if [ "$FAILED_TESTS" -gt 0 ]; then
             AUTH=$(echo -n "${JIRA_EMAIL}:${JIRA_API_TOKEN}" | base64)
