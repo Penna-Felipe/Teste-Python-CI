@@ -42,7 +42,7 @@ jobs:
       
       - name: Debug FAILED_TESTS
         run: |
-          FAILED_TESTS=$(grep -c '<failure>' results.xml || echo 0)
+          FAILED_TESTS=$(grep -c '<failures>' results.xml || echo 0)
           echo "Failed tests: $FAILED_TESTS"
         
 
@@ -53,7 +53,7 @@ jobs:
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
-          FAILED_TESTS=$(grep -c '<failure>' results.xml || true)
+          FAILED_TESTS=$(grep -c '<failures>' results.xml || true)
           echo "Failed tests: $FAILED_TESTS"
           if [ "$FAILED_TESTS" -gt 0 ]; then
             AUTH=$(echo -n "${JIRA_EMAIL}:${JIRA_API_TOKEN}" | base64)
