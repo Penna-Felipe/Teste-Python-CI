@@ -1,5 +1,5 @@
 def adicao (a, b):
-    return a + b
+    return a
 
 def subtracao (a, b):
     return a - b
