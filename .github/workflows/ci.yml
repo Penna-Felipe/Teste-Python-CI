@@ -63,36 +63,10 @@ jobs:
               }' $JIRA_BASE_URL/rest/api/2/issue/
           fi
         
-      - name: Debug Jira Issue Creation
+      - name: Debug Jira Base URL
         run: |
-            echo "Verificando se o Jira está acessível e se a criação da issue funciona..."
+            echo "JIRA_BASE_URL is: ${{ secrets.JIRA_BASE_URL }}"
+            echo "Is the URL correctly set? https://${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue"
         
-            # Testa a requisição com a flag -v para obter uma resposta mais detalhada
-            response=$(curl -v -u "${{ secrets.JIRA_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
-                 -X POST \
-                 --data '{
-                   "fields": {
-                     "project": { "key": "PROJ" },
-                     "summary": "Bug detected in the application",
-                     "description": "Detailed description of the bug",
-                     "issuetype": { "name": "Bug" }
-                   }
-                 }' \
-                 -H "Content-Type: application/json" \
-                 https://${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue)
-        
-            # Exibe a resposta completa da requisição
-            echo "Resposta completa da requisição Jira:"
-            echo "$response"
-        
-            # Verifica se houve erro e mostra o status
-            if [[ "$response" == *"errorMessages"* ]]; then
-              echo "Erro ao criar issue no Jira. Verifique os detalhes acima."
-            else
-              echo "Issue criada com sucesso no Jira."
-            fi
-        
-        
-
 
         
