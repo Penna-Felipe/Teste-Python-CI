@@ -39,6 +39,12 @@ jobs:
       - name: Show contents of results.xml
         run: |
           cat results.xml
+      
+      - name: Debug FAILED_TESTS
+        run: |
+          FAILED_TESTS=$(grep -c '<failure>' results.xml || echo 0)
+          echo "Failed tests: $FAILED_TESTS"
+        
 
       # 5. Criar issue no Jira em caso de falha nos testes
       - name: Create Jira Issue on Test Failure
