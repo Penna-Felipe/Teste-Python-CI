@@ -63,10 +63,5 @@ jobs:
               }' $JIRA_BASE_URL/rest/api/2/issue/
           fi
         
-      - name: Debug Jira Base URL
-        run: |
-            echo "JIRA_BASE_URL is: ${{ secrets.JIRA_BASE_URL }}"
-            echo "Is the URL correctly set? https://${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue"
-        
 
         
