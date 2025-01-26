@@ -51,6 +51,11 @@ jobs:
           # Extrair as mensagens de falha
           FAILURE_MESSAGES=$(xmllint --xpath "//failure/@message" results.xml)
 
+          # Garantir que o valor seja um número
+          if ! [[ "$FAILED_TESTS" =~ ^[0-9]+$ ]]; then
+            FAILED_TESTS=0
+          fi
+
           # Exibir no log
           echo "Failed tests: $FAILED_TESTS"
           echo "Failure messages: $FAILURE_MESSAGES"
