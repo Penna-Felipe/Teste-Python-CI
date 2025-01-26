@@ -62,3 +62,28 @@ jobs:
                 }
               }' $JIRA_BASE_URL/rest/api/2/issue/
           fi
+        
+      - name: Debug Jira Secrets
+        run: |
+            if [ -z "${{ secrets.JIRA_BASE_URL }}" ]; then
+              echo "JIRA_BASE_URL is NOT set"
+            else
+              echo "JIRA_BASE_URL is set"
+            fi
+        
+            if [ -z "${{ secrets.JIRA_EMAIL }}" ]; then
+              echo "JIRA_EMAIL is NOT set"
+            else
+              echo "JIRA_EMAIL is set"
+            fi
+        
+            if [ -z "${{ secrets.JIRA_API_TOKEN }}" ]; then
+              echo "JIRA_API_TOKEN is NOT set"
+            else
+              echo "JIRA_API_TOKEN is set"
+            fi
+        
+        
+
+
+        
