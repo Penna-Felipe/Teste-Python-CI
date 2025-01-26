@@ -56,7 +56,7 @@ jobs:
               -d '{
                 "fields": {
                   "project": {
-                    "key": "T1"  # Substitua pelo código do projeto no Jira
+                    "key": "T1" 
                   },
                   "summary": "Test failures detected in CI pipeline",
                   "description": "Failed tests: '"$FAILED_TESTS"'.\n\nCommit Information:\n- Commit: ${{ github.sha }}\n- Author: ${{ github.actor }}\n- Message: ${{ github.event.head_commit.message }}",
