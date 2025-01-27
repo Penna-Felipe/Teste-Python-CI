@@ -58,11 +58,10 @@ jobs:
           # Substituir quebras de linha por espaço e escapar aspas
           FAILURE_MESSAGES=$(echo "$FAILURE_MESSAGES" | sed 's/"/\\"/g' | tr '\n' ' ')
 
-          # Exibir no log
-          echo "Failed tests: $FAILED_TESTS"
-          echo "Failure messages: $FAILURE_MESSAGES"
-
           if [ "$FAILED_TESTS" -gt 0 ]; then
+            # Exibir no log
+            echo "Failed tests: $FAILED_TESTS"
+            echo "Failure messages: $FAILURE_MESSAGES"
             curl -X POST \
               -u "${JIRA_EMAIL}:${JIRA_API_TOKEN}" \
               -H "Content-Type: application/json" \
