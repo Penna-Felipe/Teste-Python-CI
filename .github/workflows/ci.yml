@@ -42,11 +42,6 @@ jobs:
           pytest --junitxml=results.xml
         continue-on-error: true
 
-      - name: Display XML file content
-        run: |
-          cat results.xml
-
-
       # 6. Contar falhas no XML usando xmllint
       - name: Extract test results and create Jira issue
         env:
@@ -86,7 +81,9 @@ jobs:
                     }
                   }
                 }' $JIRA_BASE_URL/rest/api/2/issue/
-            fi
+            else
+                echo "No test failures found. All tests passed."
+            fi        
           else
             echo "No test results file found. All tests are passing, and no errors were reported."
           fi
