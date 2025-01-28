@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check if Workflow is Triggered
+        run: echo "Workflow triggered on new GitHub Issue!"
+
       - name: Create Issue in Jira
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}

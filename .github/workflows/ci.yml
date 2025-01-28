@@ -1,4 +1,4 @@
-name: Python CI with Jira Integration
+name: Integracao Jira
 
 on:
   push:
@@ -50,7 +50,7 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
           # Verificar se o arquivo XML existe
-          if [ -f "results.xml" ]; then
+          if [ -s "results.xml" ]; then
             echo "Test results file found. Extracting test results..."
             
             # Contar o número de falhas
