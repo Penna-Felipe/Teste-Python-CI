@@ -21,7 +21,7 @@ jobs:
             -d '{
               "fields": {
                 "project": {
-                  "key": "T1"  # Substitua pelo seu código de projeto no Jira
+                  "key": "T1" 
                 },
                 "summary": "GitHub Issue: '${{ github.event.issue.title }}'",
                 "description": "Issue created from GitHub:\n\n- **Title:** '${{ github.event.issue.title }}'\n- **Body:** '${{ github.event.issue.body }}'\n- **URL:** '${{ github.event.issue.html_url }}'",
