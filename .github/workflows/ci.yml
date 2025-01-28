@@ -40,6 +40,7 @@ jobs:
         id: pytest
         run: |
           pytest --junitxml=results.xml
+          cat results.xml
         continue-on-error: true
 
       # 6. Contar falhas no XML usando xmllint
