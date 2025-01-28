@@ -55,7 +55,7 @@ jobs:
             
             # Contar o número de falhas
             FAILED_TESTS=$(xmllint --xpath "count(//failure)" results.xml | tr -d '[:space:]')
-            
+
             if [ "$FAILED_TESTS" -gt 0 ]; then
               # Extrair as mensagens de falha
               FAILURE_MESSAGES=$(xmllint --xpath "//failure/@message" results.xml)
