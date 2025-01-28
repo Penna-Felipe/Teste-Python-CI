@@ -40,8 +40,12 @@ jobs:
         id: pytest
         run: |
           pytest --junitxml=results.xml
-          cat results.xml
         continue-on-error: true
+
+      - name: Display XML file content
+        run: |
+          cat results.xml
+
 
       # 6. Contar falhas no XML usando xmllint
       - name: Extract test results and create Jira issue
