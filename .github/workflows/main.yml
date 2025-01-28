@@ -1,0 +1,36 @@
+name: GitHub Issue to Jira
+
+on:
+  issues:
+    types: 
+       - opened
+
+jobs:
+  create-jira-issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if Workflow is Triggered
+        run: echo "Workflow triggered on new GitHub Issue!"
+
+      - name: Create Issue in Jira
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          curl -X POST \
+            -u "${JIRA_EMAIL}:${JIRA_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "fields": {
+                "project": {
+                  "key": "T1" 
+                },
+                "summary": "GitHub Issue: '${{ github.event.issue.title }}'",
+                "description": "Issue created from GitHub:\n\n- **Title:** '${{ github.event.issue.title }}'\n- **Body:** '${{ github.event.issue.body }}'\n- **URL:** '${{ github.event.issue.html_url }}'",
+                "issuetype": {
+                  "name": "Task"  
+                }
+              }
+            }' $JIRA_BASE_URL/rest/api/2/issue/
