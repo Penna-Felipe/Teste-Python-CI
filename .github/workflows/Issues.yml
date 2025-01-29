@@ -1,4 +1,4 @@
-name: GitHub Issue to Jira
+name: GitHub Issue para o Jira
 
 on:
   issues:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Issue in Jira
+      - name: Cria uma Issue no Jira
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
@@ -25,7 +25,7 @@ jobs:
                   "key": "T1" 
                 },
                 "summary": "GitHub Issue: '${{ github.event.issue.title }}'",
-                "description": "Issue created from GitHub:\n\n- **Title:** '${{ github.event.issue.title }}'\n- **Body:** '${{ github.event.issue.body }}'\n- **URL:** '${{ github.event.issue.html_url }}'",
+                "description": "Issue criada no GitHub:\n\n- **Title:** '${{ github.event.issue.title }}'\n- **Body:** '${{ github.event.issue.body }}'\n- **URL:** '${{ github.event.issue.html_url }}'",
                 "issuetype": {
                   "name": "Task"  
                 }
