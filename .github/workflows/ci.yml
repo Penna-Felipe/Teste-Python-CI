@@ -42,8 +42,8 @@ jobs:
           pytest --junitxml=results.xml
         continue-on-error: true
 
-      # 6. Contar falhas no XML usando xmllint
-      - name: Extract test results and create Jira issue
+      # 6. Contar falhas no XML usando xmllint e Criar uma issue de bug no Jira
+      - name: Extrair resultado do teste e Criar issue no Jira
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
@@ -71,14 +71,14 @@ jobs:
                       "key": "T1"
                     },
                     "summary": "Test failures detected in CI pipeline",
-                    "description": "Failed tests: '"$FAILED_TESTS"'.\nCommit Information:\n- Commit: '"${{ github.sha }}"'\n- Author: '"${{ github.actor }}"'\n- Message: '"${{ github.event.head_commit.message }}"'",
+                    "description": "Testes falhados: '"$FAILED_TESTS"'.\nHash Do Commit:\n- Commit: '"${{ github.sha }}"'\n- Autor: '"${{ github.actor }}"'\n- Mesagem: '"${{ github.event.head_commit.message }}"'",
                     "issuetype": {
                       "name": "Bug"
                     }
                   }
                 }' $JIRA_BASE_URL/rest/api/2/issue/
             else
-                echo "No test failures found. All tests passed."
+                echo "Nao foi encontrado falha nos testes. Todos os testes passaram."
             fi        
           else
             echo "No test results file found. All tests are passing, and no errors were reported."
