@@ -1,4 +1,4 @@
-name: Integracao Jira
+name: Integracao Jira CI
 
 on:
   push:
@@ -51,7 +51,7 @@ jobs:
         run: |
           # Verificar se o arquivo XML existe
           if [ -s "results.xml" ]; then
-            echo "Test results file found. Extracting test results..."
+            echo "O arquivo do Resultado Dos Testes foi encontrado. Extraindo Os resultados..."
             
             # Contar o número de falhas
             FAILED_TESTS=$(xmllint --xpath "count(//failure)" results.xml | tr -d '[:space:]')
